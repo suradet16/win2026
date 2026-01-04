@@ -50,7 +50,10 @@ export function WeeklyPage() {
   const [stats, setStats] = useState<WeekStats>({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
 
   const weekStart = useMemo(() => getWeekStart(new Date()), []);
-  const weekStartStr = useMemo(() => weekStart.toISOString().split('T')[0], [weekStart]);
+  const weekStartStr = useMemo(() => {
+    const d = weekStart;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }, [weekStart]);
   const weekLabel = useMemo(() => formatWeekLabel(weekStart), [weekStart]);
 
   useEffect(() => {

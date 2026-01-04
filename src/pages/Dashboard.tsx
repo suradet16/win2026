@@ -48,10 +48,13 @@ export function DashboardPage() {
       if (!user) return;
       setLoading(true);
       try {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const formatLocalDate = (d: Date) => 
+          `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        
+        const todayStr = formatLocalDate(new Date());
         const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);
-        const weekAgoStr = weekAgo.toISOString().split('T')[0];
+        const weekAgoStr = formatLocalDate(weekAgo);
 
         const [{ data: todayData, error: todayError }, { data: weekData, error: weekError }] = await Promise.all([
           supabase
