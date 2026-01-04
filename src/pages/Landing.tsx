@@ -46,31 +46,31 @@ export function LandingPage() {
       </div>
       
       {/* Navigation */}
-      <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] md:w-[95%] max-w-7xl fade-up-1">
-        <div className="glass-strong rounded-2xl md:rounded-full px-4 md:px-8 py-3 md:py-4 flex items-center justify-between border border-white/15">
+      <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] md:w-[90%] max-w-6xl fade-up-1">
+        <div className="glass-strong rounded-2xl md:rounded-full px-4 md:px-6 py-3 md:py-3.5 flex items-center justify-between border border-white/15">
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl md:rounded-full flex items-center justify-center text-lg md:text-xl shadow-lg">
+            <div className="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl md:rounded-full flex items-center justify-center text-lg md:text-xl shadow-lg">
               🏆
             </div>
-            <span className="font-manrope font-bold text-sm md:text-lg text-white">Win 2026 OS</span>
+            <span className="font-manrope font-bold text-sm md:text-base text-white">Win 2026 OS</span>
           </div>
           
-          <div className="hidden lg:flex items-center gap-8 text-sm">
+          <div className="hidden lg:flex items-center gap-6 text-xs">
             <a href="#features" className="text-white/70 hover:text-white transition-colors font-medium">Features</a>
             <a href="#how-it-works" className="text-white/70 hover:text-white transition-colors font-medium">How It Works</a>
             <a href="#testimonials" className="text-white/70 hover:text-white transition-colors font-medium">Testimonials</a>
           </div>
           
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-2.5">
             <button
               onClick={() => navigate('/login')}
-              className="text-xs md:text-sm font-semibold text-white/80 hover:text-white transition-colors px-2 md:px-4 py-2 hidden sm:block"
+              className="text-xs md:text-xs font-semibold text-white/80 hover:text-white transition-colors px-2 md:px-3 py-2 hidden sm:block"
             >
               Login
             </button>
             <button
               onClick={() => navigate('/register')}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl md:rounded-full px-4 md:px-6 py-2 text-xs md:text-sm font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl md:rounded-full px-4 md:px-5 py-2 text-xs md:text-xs font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
             >
               Get Started
             </button>
