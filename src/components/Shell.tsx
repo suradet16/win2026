@@ -43,7 +43,6 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
               </div>
               <div>
                 <div className="font-manrope font-bold text-lg text-white">Win 2026 OS</div>
-                <div className="text-xs text-white/60">ดูวันละ 30 วิ | อัปเดตอัตโนมัติ</div>
               </div>
             </div>
 
