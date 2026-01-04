@@ -46,31 +46,31 @@ export function LandingPage() {
       </div>
       
       {/* Navigation */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl fade-up-1">
-        <div className="glass-strong rounded-full px-8 py-4 flex items-center justify-between border border-white/15">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xl shadow-lg">
+      <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] md:w-[95%] max-w-7xl fade-up-1">
+        <div className="glass-strong rounded-2xl md:rounded-full px-4 md:px-8 py-3 md:py-4 flex items-center justify-between border border-white/15">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl md:rounded-full flex items-center justify-center text-lg md:text-xl shadow-lg">
               🏆
             </div>
-            <span className="font-manrope font-bold text-lg text-white">Win 2026 OS</span>
+            <span className="font-manrope font-bold text-sm md:text-lg text-white">Win 2026 OS</span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm">
+          <div className="hidden lg:flex items-center gap-8 text-sm">
             <a href="#features" className="text-white/70 hover:text-white transition-colors font-medium">Features</a>
             <a href="#how-it-works" className="text-white/70 hover:text-white transition-colors font-medium">How It Works</a>
             <a href="#testimonials" className="text-white/70 hover:text-white transition-colors font-medium">Testimonials</a>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <button
               onClick={() => navigate('/login')}
-              className="text-sm font-semibold text-white/80 hover:text-white transition-colors px-4 py-2"
+              className="text-xs md:text-sm font-semibold text-white/80 hover:text-white transition-colors px-2 md:px-4 py-2 hidden sm:block"
             >
               Login
             </button>
             <button
               onClick={() => navigate('/register')}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full px-6 py-2 text-sm font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl md:rounded-full px-4 md:px-6 py-2 text-xs md:text-sm font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
             >
               Get Started
             </button>
@@ -79,63 +79,63 @@ export function LandingPage() {
       </nav>
       
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12">
+      <section className="relative z-10 min-h-screen flex flex-col justify-center pt-24 md:pt-0 md:justify-end pb-12 md:pb-20 px-4 md:px-12">
         <div className="max-w-7xl mx-auto w-full">
           {/* Live Indicator */}
-          <div className="mb-8 fade-up-2">
-            <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-xs uppercase tracking-wider border border-white/10">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span>
+          <div className="mb-4 md:mb-8 fade-up-2">
+            <div className="inline-flex items-center gap-2 glass rounded-full px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-wider border border-white/10">
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-500 rounded-full pulse-dot"></span>
               <span className="text-white/60">Performance Tracking System</span>
             </div>
           </div>
           
           {/* Hero Title */}
-          <h1 className="font-manrope font-black text-[12vw] md:text-[10rem] leading-[0.9] mb-6 fade-up-3">
+          <h1 className="font-manrope font-black text-[18vw] md:text-[10rem] leading-[0.85] mb-4 md:mb-6 fade-up-3">
             <span className="gradient-text">WIN</span><br/>
             <span className="text-white">2026</span>
           </h1>
           
           {/* Hero Description */}
-          <p className="text-xl md:text-2xl text-white/70 max-w-3xl mb-8 leading-relaxed fade-up-4">
-            ระบบติดตามความสำเร็จส่วนตัวที่ออกแบบมาเพื่อให้คุณชนะทุกวัน<br/>
+          <p className="text-base md:text-2xl text-white/70 max-w-3xl mb-6 md:mb-8 leading-relaxed fade-up-4">
+            ระบบติดตามความสำเร็จส่วนตัวที่ออกแบบมาเพื่อให้คุณชนะทุกวัน<br className="hidden md:block"/>
             ดูแค่ 30 วินาที อัปเดตอัตโนมัติ และไม่มีอะไรซับซ้อน
           </p>
           
           {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4 fade-up-5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4 fade-up-5">
             <button
               onClick={() => navigate('/register')}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl px-8 py-4 text-base font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-2xl"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl md:rounded-2xl px-6 md:px-8 py-3.5 md:py-4 text-sm md:text-base font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-2xl w-full sm:w-auto text-center"
             >
               เริ่มต้นใช้งานฟรี
             </button>
             <button
               onClick={() => navigate('/login')}
-              className="glass border border-white/20 text-white rounded-2xl px-8 py-4 text-base font-semibold hover:bg-white/10 transition-all"
+              className="glass border border-white/20 text-white rounded-xl md:rounded-2xl px-6 md:px-8 py-3.5 md:py-4 text-sm md:text-base font-semibold hover:bg-white/10 transition-all w-full sm:w-auto text-center"
             >
               เข้าสู่ระบบ
             </button>
           </div>
           
-          {/* Stats */}
-          <div className="absolute bottom-20 right-12 hidden lg:block fade-up-5">
-            <div className="glass-strong border border-white/15 rounded-2xl p-6">
-              <div className="flex gap-8">
+          {/* Stats - Mobile inline, Desktop absolute */}
+          <div className="mt-8 md:mt-0 md:absolute md:bottom-20 md:right-12 fade-up-5">
+            <div className="glass-strong border border-white/15 rounded-2xl p-4 md:p-6 inline-block">
+              <div className="flex gap-6 md:gap-8">
                 <div>
-                  <div className="text-4xl font-black font-manrope gradient-text mb-1">30</div>
-                  <div className="text-xs uppercase tracking-wider text-white/40">วินาที/วัน</div>
+                  <div className="text-3xl md:text-4xl font-black font-manrope gradient-text mb-1">30</div>
+                  <div className="text-[10px] md:text-xs uppercase tracking-wider text-white/40">วินาที/วัน</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-black font-manrope gradient-text mb-1">3</div>
-                  <div className="text-xs uppercase tracking-wider text-white/40">หน้าจอ</div>
+                  <div className="text-3xl md:text-4xl font-black font-manrope gradient-text mb-1">3</div>
+                  <div className="text-[10px] md:text-xs uppercase tracking-wider text-white/40">หน้าจอ</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 fade-up-6">
+        {/* Scroll Indicator - Hidden on mobile */}
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-10 fade-up-6 hidden md:block">
           <div className="flex flex-col items-center gap-2 scroll-indicator">
             <span className="text-xs uppercase tracking-wider text-white/40">Scroll</span>
             <svg className="w-5 h-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
