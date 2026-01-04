@@ -147,7 +147,7 @@ export function RegisterPage() {
                 <div className="w-full border-t border-white/20"></div>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-slate-900/50 px-4 text-white/60">หรือ</span>
+                <span className="px-4 text-white/60">หรือ</span>
               </div>
             </div>
 
