@@ -9,7 +9,7 @@ interface ShellProps {
   title: string;
   subtitle?: string;
   icon?: string;
-  active: 'dashboard' | 'daily' | 'weekly';
+  active: 'dashboard' | 'daily' | 'weekly' | 'history';
   actions?: ReactNode;
   children: ReactNode;
 }
@@ -23,6 +23,7 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
     { key: 'dashboard', label: 'Control Panel', to: '/app', icon: '📊' },
     { key: 'daily', label: 'Daily Execution', to: '/daily', icon: '📝' },
     { key: 'weekly', label: 'Weekly Review', to: '/weekly', icon: '📅' },
+    { key: 'history', label: 'History', to: '/history', icon: '📜' },
   ];
 
   async function handleLogout() {
@@ -128,13 +129,13 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {navItems.map((item) => (
               <button
                 key={item.key}
                 onClick={() => navigate(item.to)}
                 className={clsx(
-                  'rounded-xl px-3 py-3 text-xs font-semibold text-center transition-all',
+                  'rounded-xl px-2 py-3 text-xs font-semibold text-center transition-all',
                   active === item.key
                     ? 'glass-strong border border-white/20 shadow-lg'
                     : 'glass border border-white/10 hover:bg-white/15'

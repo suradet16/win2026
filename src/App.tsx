@@ -8,6 +8,7 @@ import { DashboardPage } from './pages/Dashboard';
 import { DailyPage } from './pages/Daily';
 import { WeeklyPage } from './pages/Weekly';
 import { LandingPage } from './pages/Landing';
+import { HistoryPage } from './pages/History';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/app" element={<DashboardPage />} />
           <Route path="/daily" element={<DailyPage />} />
           <Route path="/weekly" element={<WeeklyPage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

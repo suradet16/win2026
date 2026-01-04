@@ -18,11 +18,19 @@ interface WeekStats {
   healthRate: number;
 }
 
+interface WarningSignals {
+  shipStreak: number;     // consecutive days without shipping
+  deepWorkStreak: number; // consecutive days without deep work
+  healthStreak: number;   // consecutive days without health
+  badDayStreak: number;   // consecutive bad days
+}
+
 export function DashboardPage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [today, setToday] = useState<TodayStats | null>(null);
   const [week, setWeek] = useState<WeekStats>({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
+  const [warnings, setWarnings] = useState<WarningSignals>({ shipStreak: 0, deepWorkStreak: 0, healthStreak: 0, badDayStreak: 0 });
 
   const todayLabel = useMemo(
     () =>
@@ -74,8 +82,34 @@ export function DashboardPage() {
             shipCount,
             healthRate: Math.round((healthCount / total) * 100),
           });
+
+          // Calculate warning streaks (data is sorted descending by date)
+          let shipStreak = 0;
+          let deepWorkStreak = 0;
+          let healthStreak = 0;
+          let badDayStreak = 0;
+
+          for (const d of weekData) {
+            if (!d.ship) shipStreak++;
+            else break;
+          }
+          for (const d of weekData) {
+            if (!d.deep_work) deepWorkStreak++;
+            else break;
+          }
+          for (const d of weekData) {
+            if (!d.health_min) healthStreak++;
+            else break;
+          }
+          for (const d of weekData) {
+            if (d.bad_day) badDayStreak++;
+            else break;
+          }
+
+          setWarnings({ shipStreak, deepWorkStreak, healthStreak, badDayStreak });
         } else {
           setWeek({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
+          setWarnings({ shipStreak: 0, deepWorkStreak: 0, healthStreak: 0, badDayStreak: 0 });
         }
       } catch (err) {
         console.error('Dashboard fetch error:', err);
@@ -182,29 +216,51 @@ export function DashboardPage() {
                 <span>🚨</span>
                 WARNING SIGNALS
               </div>
-              <ul className="space-y-3 text-sm text-white/80 mb-6">
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5">✖</span>
-                  <span>2 วันติด Ship = No</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5">✖</span>
-                  <span>3 วันติด Deep Work = No</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5">✖</span>
-                  <span>Health Min = No ≥ 2 วัน</span>
-                </li>
+              
+              {/* Dynamic Warnings */}
+              <ul className="space-y-3 text-sm mb-6">
+                <WarningItem
+                  streak={warnings.shipStreak}
+                  threshold={2}
+                  text={`${warnings.shipStreak} วันติด Ship = No`}
+                />
+                <WarningItem
+                  streak={warnings.deepWorkStreak}
+                  threshold={3}
+                  text={`${warnings.deepWorkStreak} วันติด Deep Work = No`}
+                />
+                <WarningItem
+                  streak={warnings.healthStreak}
+                  threshold={2}
+                  text={`${warnings.healthStreak} วันติด Health Min = No`}
+                />
+                {warnings.badDayStreak > 0 && (
+                  <li className="flex items-center gap-3 text-amber-400 font-medium">
+                    <span className="text-lg">⚠️</span>
+                    <span>{warnings.badDayStreak} วันติดใช้ Bad Day Mode</span>
+                  </li>
+                )}
               </ul>
-              <div className="glass rounded-2xl p-4 border border-rose-500/20">
-                <div className="flex items-start gap-2 text-sm">
-                  <span className="mt-0.5">⚡</span>
-                  <div>
-                    <span className="font-semibold text-rose-300">แก้ไข:</span>
-                    <span className="text-white/80"> ใช้ Bad Day Mode / ลด workload ทันที</span>
+
+              {/* Alert when danger */}
+              {(warnings.shipStreak >= 2 || warnings.deepWorkStreak >= 3 || warnings.healthStreak >= 2) ? (
+                <div className="glass rounded-2xl p-4 border border-rose-500/40 bg-rose-500/10">
+                  <div className="flex items-start gap-2 text-sm">
+                    <span className="mt-0.5 text-xl">🔥</span>
+                    <div>
+                      <span className="font-bold text-rose-300">แก้ไขทันที:</span>
+                      <span className="text-white/80"> ใช้ Bad Day Mode / ลด workload ตอนนี้เลย</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="glass rounded-2xl p-4 border border-emerald-500/20 bg-emerald-500/5">
+                  <div className="flex items-start gap-2 text-sm">
+                    <span className="mt-0.5">✅</span>
+                    <div className="text-emerald-300">สถานะปกติ — ไม่มี warning ที่ต้องแก้ไข</div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Decision Tools */}
@@ -332,5 +388,32 @@ function Callout({ title, children }: { title: string; children: ReactNode }) {
       </summary>
       <div className="px-5 pb-5 pt-2 border-t border-white/10">{children}</div>
     </details>
+  );
+}
+
+function WarningItem({ 
+  streak, 
+  threshold, 
+  text 
+}: { 
+  streak: number; 
+  threshold: number; 
+  text: string;
+}) {
+  const isDanger = streak >= threshold;
+  const isWarning = streak > 0 && streak < threshold;
+  
+  return (
+    <li className={`flex items-center gap-3 transition-all ${
+      isDanger ? 'text-rose-400 font-bold' : 
+      isWarning ? 'text-amber-400' : 
+      'text-white/50'
+    }`}>
+      <span className="text-lg">
+        {isDanger ? '🔴' : isWarning ? '🟡' : '⚪'}
+      </span>
+      <span>{text}</span>
+      {isDanger && <span className="text-xs bg-rose-500/20 px-2 py-0.5 rounded-full">⚠️ เกินเกณฑ์</span>}
+    </li>
   );
 }

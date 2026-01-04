@@ -23,6 +23,7 @@ export function DailyPage() {
   const [saving, setSaving] = useState(false);
   const [mode, setMode] = useState<'standard' | 'bad'>('standard');
   const [message, setMessage] = useState<{ tone: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const [yesterdayFocus, setYesterdayFocus] = useState<string | null>(null);
   const [form, setForm] = useState<DailyRecord>({
     deep_work: false,
     ship: false,
@@ -34,6 +35,11 @@ export function DailyPage() {
   });
 
   const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
+  const yesterdayStr = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return d.toISOString().split('T')[0];
+  }, []);
   const todayLabel = useMemo(
     () =>
       new Date().toLocaleDateString('th-TH', {
@@ -49,14 +55,32 @@ export function DailyPage() {
     async function fetchDaily() {
       try {
         setLoading(true);
-        const { data, error } = await supabase
-          .from('daily_executions')
-          .select('*')
-          .eq('user_id', user?.id)
-          .eq('date', todayStr)
-          .single();
+        
+        // Fetch today's data and yesterday's tomorrow_focus in parallel
+        const [{ data, error }, { data: yesterdayData, error: yesterdayError }] = await Promise.all([
+          supabase
+            .from('daily_executions')
+            .select('*')
+            .eq('user_id', user?.id)
+            .eq('date', todayStr)
+            .single(),
+          supabase
+            .from('daily_executions')
+            .select('tomorrow_focus')
+            .eq('user_id', user?.id)
+            .eq('date', yesterdayStr)
+            .single(),
+        ]);
 
         if (error && error.code !== 'PGRST116') throw error;
+        if (yesterdayError && yesterdayError.code !== 'PGRST116') {
+          console.log('No yesterday data found');
+        }
+
+        // Set yesterday's tomorrow_focus as suggestion
+        if (yesterdayData?.tomorrow_focus) {
+          setYesterdayFocus(yesterdayData.tomorrow_focus);
+        }
 
         if (data) {
           setForm({
@@ -79,7 +103,7 @@ export function DailyPage() {
     }
 
     if (user) fetchDaily();
-  }, [todayStr, user]);
+  }, [todayStr, yesterdayStr, user]);
 
   function updateLocal(field: keyof DailyRecord, value: any) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -164,6 +188,26 @@ export function DailyPage() {
         </div>
       ) : (
         <div className="glass-strong rounded-3xl border border-white/15 p-6 lg:p-8 space-y-6 fade-up-4">
+          {/* Yesterday's Focus Suggestion */}
+          {yesterdayFocus && !form.output_name && (
+            <div className="glass rounded-2xl border border-indigo-500/30 bg-indigo-500/10 p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">💡</span>
+                <div className="font-semibold text-indigo-300 text-sm">เมื่อวานวางแผนไว้ว่า</div>
+              </div>
+              <div className="text-white/90 font-medium">{yesterdayFocus}</div>
+              <button
+                onClick={() => {
+                  updateLocal('output_name', yesterdayFocus);
+                  upsert({ output_name: yesterdayFocus });
+                }}
+                className="text-xs bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 px-3 py-1.5 rounded-lg font-semibold transition-all"
+              >
+                ✨ ใช้เป็น Output วันนี้
+              </button>
+            </div>
+          )}
+
           {/* Mode Selection */}
           <div className="flex flex-wrap gap-3">
             <button
