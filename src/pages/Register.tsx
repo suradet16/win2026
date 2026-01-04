@@ -142,13 +142,12 @@ export function RegisterPage() {
             </form>
 
             {/* Divider */}
-            <div className="relative my-6 fade-up-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20"></div>
+            <div className="flex items-center gap-4 my-6 fade-up-6">
+              <div className="flex-1 border-t border-white/20"></div>
+              <div className="glass border border-white/10 rounded-lg px-4 py-2">
+                <span className="text-xs uppercase text-white/60">หรือ</span>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-gradient-to-r from-slate-900/95 via-purple-900/90 to-slate-900/95 px-4 text-white/60">หรือ</span>
-              </div>
+              <div className="flex-1 border-t border-white/20"></div>
             </div>
 
             {/* Google Sign In */}
