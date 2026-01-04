@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
+import { HelpModal } from './HelpModal';
 
 interface ShellProps {
   title: string;
@@ -15,6 +17,7 @@ interface ShellProps {
 export function Shell({ title, subtitle, icon = '🏆', active, actions, children }: ShellProps) {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const navItems = [
     { key: 'dashboard', label: 'Control Panel', to: '/app', icon: '📊' },
@@ -41,9 +44,18 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg">
                 {icon}
               </div>
-              <div>
+              <div className="flex-1">
                 <div className="font-manrope font-bold text-lg text-white">Win 2026 OS</div>
               </div>
+              <button
+                onClick={() => setIsHelpOpen(true)}
+                className="w-8 h-8 rounded-lg glass border border-white/20 hover:bg-white/20 flex items-center justify-center transition-all group"
+                title="วิธีใช้งาน"
+              >
+                <svg className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
             </div>
 
             {/* User Account Card */}
@@ -97,12 +109,23 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
                 <div className="font-manrope font-bold text-white">Win 2026 OS</div>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="btn-danger rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg"
-            >
-              ออกจากระบบ
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsHelpOpen(true)}
+                className="w-10 h-10 rounded-xl glass border border-white/20 hover:bg-white/20 flex items-center justify-center transition-all"
+                title="วิธีใช้งาน"
+              >
+                <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="btn-danger rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg"
+              >
+                ออกจากระบบ
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
@@ -155,6 +178,8 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
           </div>
         </main>
       </div>
+      
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </div>
   );
 }
