@@ -202,7 +202,6 @@ export function DailyPage() {
               <button
                 onClick={() => {
                   updateLocal('output_name', yesterdayFocus);
-                  upsert({ output_name: yesterdayFocus });
                 }}
                 className="text-xs bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 px-3 py-1.5 rounded-lg font-semibold transition-all"
               >
