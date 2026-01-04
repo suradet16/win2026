@@ -148,9 +148,8 @@ export function WeeklyPage() {
     }
   }
 
-  async function handleBlur(field: keyof WeeklyForm, value: string) {
+  function handleChange(field: keyof WeeklyForm, value: string) {
     updateLocal(field, value);
-    await upsert({ [field]: value });
   }
 
   async function handleSave() {
@@ -194,60 +193,72 @@ export function WeeklyPage() {
             <StatCard label="Health Rate" value={`${stats.healthRate}%`} tone="amber" />
           </div>
 
-          {/* Review Form */}
-          <div className="glass-strong rounded-3xl border border-white/15 p-6 lg:p-8 space-y-6 fade-up-5">
-            {/* Weekly One Thing - Priority Section */}
-            <div className="glass rounded-2xl border border-indigo-500/30 bg-indigo-500/10 p-5 space-y-4">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🎯</span>
-                <div className="font-bold text-indigo-300">Weekly One Thing</div>
+          {/* Weekly One Thing - Separate Card */}
+          <div className="glass-strong rounded-3xl border border-indigo-500/30 bg-indigo-500/5 p-6 lg:p-8 space-y-5 fade-up-5">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🎯</span>
+              <div>
+                <div className="font-bold text-lg text-indigo-300">Weekly One Thing</div>
+                <div className="text-xs text-white/50">สัปดาห์นี้ต้องชนะเรื่องเดียวนี้</div>
               </div>
-              
-              <TextInput
-                label="สัปดาห์นี้ถ้าชนะได้เรื่องเดียว คือ"
-                placeholder="สิ่งสำคัญที่สุดที่ต้องทำให้เสร็จ"
-                defaultValue={form.one_thing}
-                onBlur={(val) => handleBlur('one_thing', val)}
-              />
-              
-              <TextInput
-                label="วัดว่าชนะได้ยังไง"
-                placeholder="เช่น: ส่ง draft ให้ mentor ภายในศุกร์"
-                defaultValue={form.win_condition}
-                onBlur={(val) => handleBlur('win_condition', val)}
-              />
             </div>
+            
+            <TextInput
+              label="สัปดาห์นี้ถ้าชนะได้เรื่องเดียว คือ"
+              placeholder="สิ่งสำคัญที่สุดที่ต้องทำให้เสร็จ"
+              value={form.one_thing}
+              onChange={(val) => handleChange('one_thing', val)}
+            />
+            
+            <TextInput
+              label="วัดว่าชนะได้ยังไง"
+              placeholder="เช่น: ส่ง draft ให้ mentor ภายในศุกร์"
+              value={form.win_condition}
+              onChange={(val) => handleChange('win_condition', val)}
+            />
 
-            <div className="border-t border-white/10 pt-6">
-              <div className="text-xs text-white/40 uppercase tracking-wider mb-4">📋 Weekly Review</div>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl py-3 text-sm font-bold text-white shadow-lg hover:shadow-xl transition-all disabled:opacity-60"
+            >
+              {saving ? 'กำลังบันทึก...' : '🎯 บันทึก One Thing'}
+            </button>
+          </div>
+
+          {/* Review Form */}
+          <div className="glass-strong rounded-3xl border border-white/15 p-6 lg:p-8 space-y-6 fade-up-6">
+            <div className="flex items-center gap-2 text-white/60">
+              <span className="text-xl">📋</span>
+              <div className="text-sm font-semibold uppercase tracking-wider">Weekly Review</div>
             </div>
 
             <TextArea
               label="① สัปดาห์นี้ชนะเพราะ"
               placeholder="คิดถึงสิ่งที่ทำให้สัปดาห์นี้ดีขึ้น"
-              defaultValue={form.win_reason}
-              onBlur={(val) => handleBlur('win_reason', val)}
+              value={form.win_reason}
+              onChange={(val) => handleChange('win_reason', val)}
             />
             
             <TextArea
               label="② แพ้เพราะ"
               placeholder="มองหาสาเหตุจริง ๆ ไม่ใช่แค่อาการ"
-              defaultValue={form.lose_reason}
-              onBlur={(val) => handleBlur('lose_reason', val)}
+              value={form.lose_reason}
+              onChange={(val) => handleChange('lose_reason', val)}
             />
             
             <TextInput
               label="③ สิ่งที่ควรตัดสัปดาห์หน้า (1 อย่าง)"
               placeholder="เลือก 1 สิ่งที่กินเวลา แต่ไม่ได้ช่วย Win 2026"
-              defaultValue={form.cut_next}
-              onBlur={(val) => handleBlur('cut_next', val)}
+              value={form.cut_next}
+              onChange={(val) => handleChange('cut_next', val)}
             />
             
             <TextArea
               label="④ Output ทั้งสัปดาห์"
               placeholder={'1. \n2. \n3. \n\nลิสต์สิ่งที่ Ship ออกมาจริง ๆ'}
-              defaultValue={form.outputs}
-              onBlur={(val) => handleBlur('outputs', val)}
+              value={form.outputs}
+              onChange={(val) => handleChange('outputs', val)}
             />
 
             <button
@@ -282,13 +293,13 @@ function StatCard({ label, value, tone }: { label: string; value: string; tone: 
 function TextArea({
   label,
   placeholder,
-  defaultValue,
-  onBlur,
+  value,
+  onChange,
 }: {
   label: string;
   placeholder?: string;
-  defaultValue?: string;
-  onBlur: (value: string) => void | Promise<void>;
+  value?: string;
+  onChange: (value: string) => void;
 }) {
   return (
     <div className="space-y-2">
@@ -296,8 +307,8 @@ function TextArea({
       <textarea
         className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 min-h-[140px] focus:outline-none focus:border-sky-400/50 focus:bg-white/10 transition-all resize-y"
         placeholder={placeholder}
-        defaultValue={defaultValue}
-        onBlur={(e) => onBlur(e.target.value)}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   );
@@ -306,13 +317,13 @@ function TextArea({
 function TextInput({
   label,
   placeholder,
-  defaultValue,
-  onBlur,
+  value,
+  onChange,
 }: {
   label: string;
   placeholder?: string;
-  defaultValue?: string;
-  onBlur: (value: string) => void | Promise<void>;
+  value?: string;
+  onChange: (value: string) => void;
 }) {
   return (
     <div className="space-y-2">
@@ -320,8 +331,8 @@ function TextInput({
       <input
         className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-sky-400/50 focus:bg-white/10 transition-all"
         placeholder={placeholder}
-        defaultValue={defaultValue}
-        onBlur={(e) => onBlur(e.target.value)}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   );
