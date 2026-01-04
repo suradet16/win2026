@@ -43,6 +43,7 @@ export function WeeklyPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const [vision, setVision] = useState<string | null>(null);
   const [form, setForm] = useState<WeeklyForm>({
     one_thing: '',
     win_condition: '',
@@ -66,7 +67,7 @@ export function WeeklyPage() {
       try {
         setLoading(true);
 
-        const [{ data: weeklyData, error: weeklyError }, { data: dailyData, error: dailyError }] = await Promise.all([
+        const [{ data: weeklyData, error: weeklyError }, { data: dailyData, error: dailyError }, { data: profileData, error: profileError }] = await Promise.all([
           supabase
             .from('weekly_reviews')
             .select('*')
@@ -79,6 +80,11 @@ export function WeeklyPage() {
             .eq('user_id', user.id)
             .gte('date', weekStartStr)
             .order('date', { ascending: false }),
+          supabase
+            .from('user_profiles')
+            .select('vision')
+            .eq('user_id', user.id)
+            .single(),
         ]);
 
         if (weeklyError && weeklyError.code !== 'PGRST116') throw weeklyError;
@@ -91,6 +97,13 @@ export function WeeklyPage() {
             cut_next: weeklyData.cut_next || '',
             outputs: weeklyData.outputs || '',
           });
+        }
+
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.log('No profile found');
+        }
+        if (profileData?.vision) {
+          setVision(profileData.vision);
         }
 
         if (dailyError && dailyError.code !== 'PGRST116') throw dailyError;
@@ -202,6 +215,33 @@ export function WeeklyPage() {
                 <div className="text-xs text-white/50">สัปดาห์นี้ต้องชนะเรื่องเดียวนี้</div>
               </div>
             </div>
+
+            {/* Vision Reminder */}
+            {vision ? (
+              <div className="glass rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                <div className="flex items-start gap-2">
+                  <span className="text-lg">🏆</span>
+                  <div className="text-sm">
+                    <span className="text-amber-300 font-semibold">Win 2026: </span>
+                    <span className="text-white/70">{vision}</span>
+                  </div>
+                </div>
+                <div className="text-xs text-white/40 mt-2 ml-7">One Thing ต้องพาไปถึง Vision นี้</div>
+              </div>
+            ) : (
+              <div 
+                onClick={() => navigate('/profile')}
+                className="glass rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 cursor-pointer hover:bg-amber-500/10 transition-all"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">⚠️</span>
+                    <span className="text-sm text-amber-300">ยังไม่ได้ตั้ง Win 2026 Vision</span>
+                  </div>
+                  <span className="text-white/40">→</span>
+                </div>
+              </div>
+            )}
             
             <TextInput
               label="สัปดาห์นี้ถ้าชนะได้เรื่องเดียว คือ"

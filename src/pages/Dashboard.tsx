@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { Spinner } from '../components/Spinner';
 import { Shell } from '../components/Shell';
@@ -25,12 +26,19 @@ interface WarningSignals {
   badDayStreak: number;   // consecutive bad days
 }
 
+interface UserProfile {
+  vision: string | null;
+  primary_skill: string | null;
+}
+
 export function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [today, setToday] = useState<TodayStats | null>(null);
   const [week, setWeek] = useState<WeekStats>({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
   const [warnings, setWarnings] = useState<WarningSignals>({ shipStreak: 0, deepWorkStreak: 0, healthStreak: 0, badDayStreak: 0 });
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const todayLabel = useMemo(
     () =>
@@ -56,7 +64,7 @@ export function DashboardPage() {
         weekAgo.setDate(weekAgo.getDate() - 7);
         const weekAgoStr = formatLocalDate(weekAgo);
 
-        const [{ data: todayData, error: todayError }, { data: weekData, error: weekError }] = await Promise.all([
+        const [{ data: todayData, error: todayError }, { data: weekData, error: weekError }, { data: profileData, error: profileError }] = await Promise.all([
           supabase
             .from('daily_executions')
             .select('*')
@@ -69,10 +77,22 @@ export function DashboardPage() {
             .eq('user_id', user.id)
             .gte('date', weekAgoStr)
             .order('date', { ascending: false }),
+          supabase
+            .from('user_profiles')
+            .select('vision, primary_skill')
+            .eq('user_id', user.id)
+            .single(),
         ]);
 
         if (todayError && todayError.code !== 'PGRST116') throw todayError;
         if (!todayError) setToday(todayData as TodayStats | null);
+
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.log('No profile found');
+        }
+        if (profileData) {
+          setProfile(profileData as UserProfile);
+        }
 
         if (weekError && weekError.code !== 'PGRST116') throw weekError;
         if (weekData && weekData.length > 0) {
@@ -137,6 +157,52 @@ export function DashboardPage() {
         </div>
       ) : (
         <div className="space-y-10">
+          {/* Win 2026 Vision Section */}
+          {profile?.vision ? (
+            <section className="fade-up-2">
+              <div 
+                onClick={() => navigate('/profile')}
+                className="glass-strong rounded-3xl p-6 border border-amber-500/30 bg-amber-500/5 cursor-pointer hover:bg-amber-500/10 transition-all group"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-2 flex-1">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-amber-400 uppercase tracking-wider">
+                      <span>🏆</span>
+                      Win 2026 Vision
+                    </div>
+                    <div className="text-white/90 font-medium">{profile.vision}</div>
+                    {profile.primary_skill && (
+                      <div className="flex items-center gap-2 mt-3">
+                        <span className="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded-lg">
+                          ⚡ {profile.primary_skill}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-white/30 group-hover:text-white/60 transition-colors">✏️</span>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section className="fade-up-2">
+              <div 
+                onClick={() => navigate('/profile')}
+                className="glass-strong rounded-3xl p-6 border border-amber-500/30 bg-amber-500/5 cursor-pointer hover:bg-amber-500/10 transition-all"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🎯</span>
+                    <div>
+                      <div className="font-bold text-amber-300">ตั้ง Win 2026 Vision</div>
+                      <div className="text-sm text-white/50">กำหนดทิศทางก่อน แล้วค่อย execute</div>
+                    </div>
+                  </div>
+                  <span className="text-2xl">→</span>
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* Today Section */}
           <section className="space-y-4 fade-up-3">
             <div className="flex items-center gap-2 text-sm font-semibold text-emerald-400 uppercase tracking-wider">
