@@ -17,6 +17,12 @@ interface WeekStats {
   deepWorkRate: number;
   shipCount: number;
   healthRate: number;
+  // Win Rate (excluding bad days)
+  totalDays: number;
+  activeDays: number; // days that are not bad_day
+  shipDays: number;
+  deepWorkDays: number;
+  healthDays: number;
 }
 
 interface WarningSignals {
@@ -36,7 +42,10 @@ export function DashboardPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [today, setToday] = useState<TodayStats | null>(null);
-  const [week, setWeek] = useState<WeekStats>({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
+  const [week, setWeek] = useState<WeekStats>({ 
+    deepWorkRate: 0, shipCount: 0, healthRate: 0,
+    totalDays: 0, activeDays: 0, shipDays: 0, deepWorkDays: 0, healthDays: 0
+  });
   const [warnings, setWarnings] = useState<WarningSignals>({ shipStreak: 0, deepWorkStreak: 0, healthStreak: 0, badDayStreak: 0 });
   const [profile, setProfile] = useState<UserProfile | null>(null);
 
@@ -97,13 +106,27 @@ export function DashboardPage() {
         if (weekError && weekError.code !== 'PGRST116') throw weekError;
         if (weekData && weekData.length > 0) {
           const total = weekData.length;
-          const deepWorkCount = weekData.filter((d: any) => d.deep_work).length;
+          // Exclude bad_day from win rate calculation
+          const activeDays = weekData.filter((d: any) => !d.bad_day);
+          const activeTotal = activeDays.length;
+          
+          // Win rate counts (only from active days)
+          const shipDays = activeDays.filter((d: any) => d.ship).length;
+          const deepWorkDays = activeDays.filter((d: any) => d.deep_work).length;
+          const healthDays = activeDays.filter((d: any) => d.health_min).length;
+          
+          // Total ship count (all days, for display)
           const shipCount = weekData.filter((d: any) => d.ship).length;
-          const healthCount = weekData.filter((d: any) => d.health_min).length;
+          
           setWeek({
-            deepWorkRate: Math.round((deepWorkCount / total) * 100),
+            deepWorkRate: activeTotal > 0 ? Math.round((deepWorkDays / activeTotal) * 100) : 0,
             shipCount,
-            healthRate: Math.round((healthCount / total) * 100),
+            healthRate: activeTotal > 0 ? Math.round((healthDays / activeTotal) * 100) : 0,
+            totalDays: total,
+            activeDays: activeTotal,
+            shipDays,
+            deepWorkDays,
+            healthDays,
           });
 
           // Calculate warning streaks (data is sorted descending by date)
@@ -131,7 +154,7 @@ export function DashboardPage() {
 
           setWarnings({ shipStreak, deepWorkStreak, healthStreak, badDayStreak });
         } else {
-          setWeek({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
+          setWeek({ deepWorkRate: 0, shipCount: 0, healthRate: 0, totalDays: 0, activeDays: 0, shipDays: 0, deepWorkDays: 0, healthDays: 0 });
           setWarnings({ shipStreak: 0, deepWorkStreak: 0, healthStreak: 0, badDayStreak: 0 });
         }
       } catch (err) {
@@ -252,8 +275,37 @@ export function DashboardPage() {
           <section className="space-y-4 fade-up-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-sky-400 uppercase tracking-wider">
               <span>📊</span>
-              This Week
+              This Week (7 Days)
             </div>
+
+            {/* Win Rate Summary */}
+            {week.activeDays > 0 && (
+              <div className="glass-strong rounded-2xl p-5 border border-white/15">
+                <div className="text-xs text-white/50 uppercase tracking-wider mb-3">Win Rate (ไม่นับ Bad Day)</div>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className={week.shipDays === week.activeDays ? 'text-emerald-400' : 'text-white/70'}>
+                      Ship ✅ {week.shipDays}/{week.activeDays}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={week.deepWorkDays === week.activeDays ? 'text-emerald-400' : 'text-white/70'}>
+                      Deep Work ✅ {week.deepWorkDays}/{week.activeDays}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={week.healthDays === week.activeDays ? 'text-emerald-400' : 'text-white/70'}>
+                      Health ✅ {week.healthDays}/{week.activeDays}
+                    </span>
+                  </div>
+                </div>
+                {week.totalDays !== week.activeDays && (
+                  <div className="text-xs text-white/40 mt-2">
+                    ({week.totalDays - week.activeDays} วัน Bad Day ไม่นับรวม)
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="grid md:grid-cols-3 gap-4">
               <WeekCard 

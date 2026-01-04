@@ -44,6 +44,7 @@ export function WeeklyPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [vision, setVision] = useState<string | null>(null);
+  const [suggestedOutputs, setSuggestedOutputs] = useState<string[]>([]);
   const [form, setForm] = useState<WeeklyForm>({
     one_thing: '',
     win_condition: '',
@@ -118,6 +119,12 @@ export function WeeklyPage() {
               shipCount,
               healthRate: Math.round((healthCount / total) * 100),
             });
+            
+            // Extract shipped outputs for suggestion
+            const shippedOutputs = dailyData
+              .filter((d: any) => d.ship && d.output_name)
+              .map((d: any) => d.output_name as string);
+            setSuggestedOutputs(shippedOutputs);
           } else {
             setStats({ deepWorkRate: 0, shipCount: 0, healthRate: 0 });
           }
@@ -294,12 +301,52 @@ export function WeeklyPage() {
               onChange={(val) => handleChange('cut_next', val)}
             />
             
-            <TextArea
-              label="④ Output ทั้งสัปดาห์"
-              placeholder={'1. \n2. \n3. \n\nลิสต์สิ่งที่ Ship ออกมาจริง ๆ'}
-              value={form.outputs}
-              onChange={(val) => handleChange('outputs', val)}
-            />
+            {/* Output Section with Suggestions */}
+            <div className="space-y-3">
+              <TextArea
+                label="④ Output ทั้งสัปดาห์"
+                placeholder={'1. \n2. \n3. \n\nลิสต์สิ่งที่ Ship ออกมาจริง ๆ'}
+                value={form.outputs}
+                onChange={(val) => handleChange('outputs', val)}
+              />
+              
+              {/* Suggested Outputs from Daily */}
+              {suggestedOutputs.length > 0 && (
+                <div className="glass rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-sm text-emerald-400 font-semibold">
+                      <span>💡</span>
+                      Shipped จาก Daily ({suggestedOutputs.length})
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const outputList = suggestedOutputs.map((o, i) => `${i + 1}. ${o}`).join('\n');
+                        handleChange('outputs', form.outputs ? `${form.outputs}\n${outputList}` : outputList);
+                      }}
+                      className="text-xs bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-lg font-semibold transition-all"
+                    >
+                      ✨ เพิ่มทั้งหมด
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {suggestedOutputs.map((output, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          const newOutput = form.outputs ? `${form.outputs}\n• ${output}` : `• ${output}`;
+                          handleChange('outputs', newOutput);
+                        }}
+                        className="text-xs bg-white/5 hover:bg-white/10 text-white/80 px-3 py-1.5 rounded-lg transition-all border border-white/10"
+                      >
+                        + {output}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <button
               onClick={handleSave}
