@@ -43,6 +43,7 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
               </div>
               <div>
                 <div className="font-manrope font-bold text-lg text-white">Win 2026 OS</div>
+                <div className="text-xs text-white/60">ดูวันละ 30 วิ | อัปเดตอัตโนมัติ</div>
               </div>
             </div>
 
@@ -89,8 +90,14 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
         {/* Mobile Navigation */}
         <aside className="glass-mobile lg:hidden mx-4 mt-6 fade-up-1">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center text-xl shadow-lg">
-              {icon}
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center text-xl shadow-lg">
+                {icon}
+              </div>
+              <div>
+                <div className="font-manrope font-bold text-white">Win 2026 OS</div>
+                <div className="text-xs text-white/60">ดูวันละ 30 วิ</div>
+              </div>
             </div>
             <button
               onClick={handleLogout}
