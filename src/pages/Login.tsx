@@ -141,7 +141,7 @@ export function LoginPage() {
             {/* Divider */}
             <div className="flex items-center gap-4 my-6 fade-up-6">
               <div className="flex-1 border-t border-white/20"></div>
-              <div className="glass border border-white/10 rounded-lg px-4 py-2">
+              <div className="bg-slate-900/50 rounded-lg px-4 py-2">
                 <span className="text-xs uppercase text-white/60">หรือ</span>
               </div>
               <div className="flex-1 border-t border-white/20"></div>
