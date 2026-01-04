@@ -14,6 +14,7 @@ interface DailyRecord {
   output_name: string | null;
   noise: string | null;
   tomorrow_focus: string | null;
+  relates_to_one_thing: boolean;
 }
 
 export function DailyPage() {
@@ -24,6 +25,7 @@ export function DailyPage() {
   const [mode, setMode] = useState<'standard' | 'bad'>('standard');
   const [message, setMessage] = useState<{ tone: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [yesterdayFocus, setYesterdayFocus] = useState<string | null>(null);
+  const [weeklyOneThing, setWeeklyOneThing] = useState<string | null>(null);
   const [form, setForm] = useState<DailyRecord>({
     deep_work: false,
     ship: false,
@@ -32,6 +34,7 @@ export function DailyPage() {
     output_name: '',
     noise: '',
     tomorrow_focus: '',
+    relates_to_one_thing: false,
   });
 
   const todayStr = useMemo(() => {
@@ -59,8 +62,18 @@ export function DailyPage() {
       try {
         setLoading(true);
         
-        // Fetch today's data and yesterday's tomorrow_focus in parallel
-        const [{ data, error }, { data: yesterdayData, error: yesterdayError }] = await Promise.all([
+        // Get current week start for fetching one_thing
+        const getWeekStart = (date: Date) => {
+          const d = new Date(date);
+          const day = d.getDay();
+          const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+          d.setDate(diff);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+        const weekStartStr = getWeekStart(new Date());
+        
+        // Fetch today's data, yesterday's tomorrow_focus, and this week's one_thing
+        const [{ data, error }, { data: yesterdayData, error: yesterdayError }, { data: weeklyData, error: weeklyError }] = await Promise.all([
           supabase
             .from('daily_executions')
             .select('*')
@@ -73,16 +86,30 @@ export function DailyPage() {
             .eq('user_id', user?.id)
             .eq('date', yesterdayStr)
             .single(),
+          supabase
+            .from('weekly_reviews')
+            .select('one_thing')
+            .eq('user_id', user?.id)
+            .eq('week_start_date', weekStartStr)
+            .single(),
         ]);
 
         if (error && error.code !== 'PGRST116') throw error;
         if (yesterdayError && yesterdayError.code !== 'PGRST116') {
           console.log('No yesterday data found');
         }
+        if (weeklyError && weeklyError.code !== 'PGRST116') {
+          console.log('No weekly data found');
+        }
 
         // Set yesterday's tomorrow_focus as suggestion
         if (yesterdayData?.tomorrow_focus) {
           setYesterdayFocus(yesterdayData.tomorrow_focus);
+        }
+
+        // Set this week's one_thing
+        if (weeklyData?.one_thing) {
+          setWeeklyOneThing(weeklyData.one_thing);
         }
 
         if (data) {
@@ -94,6 +121,7 @@ export function DailyPage() {
             output_name: data.output_name || '',
             noise: data.noise || '',
             tomorrow_focus: data.tomorrow_focus || '',
+            relates_to_one_thing: !!data.relates_to_one_thing,
           });
           setMode(data.bad_day ? 'bad' : 'standard');
         }
@@ -183,6 +211,19 @@ export function DailyPage() {
         <div className="text-xl font-bold text-white mt-1">{todayLabel}</div>
       </div>
 
+      {/* Weekly One Thing Banner */}
+      {weeklyOneThing && (
+        <div className="glass rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 fade-up-3">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🎯</span>
+            <div>
+              <div className="text-xs text-emerald-400 uppercase tracking-wider font-semibold">This Week's One Thing</div>
+              <div className="text-white font-bold">{weeklyOneThing}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {message && <Alert tone={message.tone} title={message.text} />}
 
       {loading ? (
@@ -256,6 +297,26 @@ export function DailyPage() {
                 await upsert({ output_name: val });
               }}
             />
+            {/* Relates to One Thing - Optional */}
+            {weeklyOneThing && form.ship && (
+              <div className="ml-4 glass rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.relates_to_one_thing}
+                    onChange={async () => {
+                      const next = !form.relates_to_one_thing;
+                      updateLocal('relates_to_one_thing', next);
+                      await upsert({ relates_to_one_thing: next });
+                    }}
+                    className="w-5 h-5 rounded border-2 border-emerald-400/50 bg-transparent checked:bg-emerald-500 checked:border-emerald-500 focus:ring-emerald-500 transition-all"
+                  />
+                  <span className="text-sm text-emerald-300">
+                    🎯 Output นี้เกี่ยวข้องกับ One Thing
+                  </span>
+                </label>
+              </div>
+            )}
             <CheckRow
               label="Noise วันนี้"
               description="สิ่งที่ไม่พาไป Win 2026"

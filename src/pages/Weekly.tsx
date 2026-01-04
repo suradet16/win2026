@@ -7,6 +7,8 @@ import { Alert } from '../components/Alert';
 import { Shell } from '../components/Shell';
 
 interface WeeklyForm {
+  one_thing: string;
+  win_condition: string;
   win_reason: string;
   lose_reason: string;
   cut_next: string;
@@ -42,6 +44,8 @@ export function WeeklyPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [form, setForm] = useState<WeeklyForm>({
+    one_thing: '',
+    win_condition: '',
     win_reason: '',
     lose_reason: '',
     cut_next: '',
@@ -80,6 +84,8 @@ export function WeeklyPage() {
         if (weeklyError && weeklyError.code !== 'PGRST116') throw weeklyError;
         if (weeklyData) {
           setForm({
+            one_thing: weeklyData.one_thing || '',
+            win_condition: weeklyData.win_condition || '',
             win_reason: weeklyData.win_reason || '',
             lose_reason: weeklyData.lose_reason || '',
             cut_next: weeklyData.cut_next || '',
@@ -190,6 +196,32 @@ export function WeeklyPage() {
 
           {/* Review Form */}
           <div className="glass-strong rounded-3xl border border-white/15 p-6 lg:p-8 space-y-6 fade-up-5">
+            {/* Weekly One Thing - Priority Section */}
+            <div className="glass rounded-2xl border border-indigo-500/30 bg-indigo-500/10 p-5 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🎯</span>
+                <div className="font-bold text-indigo-300">Weekly One Thing</div>
+              </div>
+              
+              <TextInput
+                label="สัปดาห์นี้ถ้าชนะได้เรื่องเดียว คือ"
+                placeholder="สิ่งสำคัญที่สุดที่ต้องทำให้เสร็จ"
+                defaultValue={form.one_thing}
+                onBlur={(val) => handleBlur('one_thing', val)}
+              />
+              
+              <TextInput
+                label="วัดว่าชนะได้ยังไง"
+                placeholder="เช่น: ส่ง draft ให้ mentor ภายในศุกร์"
+                defaultValue={form.win_condition}
+                onBlur={(val) => handleBlur('win_condition', val)}
+              />
+            </div>
+
+            <div className="border-t border-white/10 pt-6">
+              <div className="text-xs text-white/40 uppercase tracking-wider mb-4">📋 Weekly Review</div>
+            </div>
+
             <TextArea
               label="① สัปดาห์นี้ชนะเพราะ"
               placeholder="คิดถึงสิ่งที่ทำให้สัปดาห์นี้ดีขึ้น"
