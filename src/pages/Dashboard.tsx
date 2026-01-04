@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Spinner } from '../components/Spinner';
 import { Shell } from '../components/Shell';
