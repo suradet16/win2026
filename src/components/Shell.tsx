@@ -5,11 +5,13 @@ import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
 import { HelpModal } from './HelpModal';
 
+import type { NavKey } from '../types/domain';
+
 interface ShellProps {
   title: string;
   subtitle?: string;
   icon?: string;
-  active: 'dashboard' | 'daily' | 'weekly' | 'history';
+  active: NavKey;
   actions?: ReactNode;
   children: ReactNode;
 }
@@ -24,7 +26,8 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
     { key: 'daily', label: 'Daily Execution', to: '/daily', icon: '📝' },
     { key: 'weekly', label: 'Weekly Review', to: '/weekly', icon: '📅' },
     { key: 'history', label: 'History', to: '/history', icon: '📜' },
-  ];
+    { key: 'profile', label: 'Profile', to: '/profile', icon: '🎯' },
+  ] as const;
 
   async function handleLogout() {
     await signOut();
@@ -129,7 +132,7 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-5 gap-2">
             {navItems.map((item) => (
               <button
                 key={item.key}

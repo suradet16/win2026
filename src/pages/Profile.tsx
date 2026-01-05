@@ -91,7 +91,7 @@ export function ProfilePage() {
       title="Win 2026 Profile"
       subtitle="ตั้งครั้งเดียว ทบทวนทุกไตรมาส"
       icon="🎯"
-      active="dashboard"
+      active="profile"
       actions={
         <button
           onClick={() => navigate('/app')}

@@ -1,6 +1,7 @@
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
@@ -13,6 +14,7 @@ import { ProfilePage } from './pages/Profile';
 
 function App() {
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -28,6 +30,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
