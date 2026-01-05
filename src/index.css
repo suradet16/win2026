@@ -181,17 +181,17 @@ body {
   content: '';
   position: absolute;
   z-index: -1;
-  inset: -2px;
+  inset: -1px;
   border-radius: inherit;
   background: conic-gradient(
     from var(--border-angle, 0deg),
     transparent 0%,
-    var(--border-color-1, #f59e0b) 10%,
-    var(--border-color-2, #fbbf24) 20%,
-    transparent 30%,
+    var(--border-color-1, #f59e0b) 5%,
+    var(--border-color-2, #fbbf24) 10%,
+    transparent 15%,
     transparent 100%
   );
-  animation: borderRotate 4s linear infinite;
+  animation: borderRotate 8s linear infinite;
 }
 
 .animated-border::after {
