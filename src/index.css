@@ -25,7 +25,9 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  background: 
+    linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.90) 50%, rgba(51, 65, 85, 0.88) 100%),
+    url('/mountain-bg.jpg') center/cover fixed no-repeat;
   color: #f1f5f9;
   overflow-x: hidden;
 }
