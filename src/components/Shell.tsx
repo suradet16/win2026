@@ -26,7 +26,6 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
     { key: 'daily', label: 'Daily Execution', to: '/daily', icon: '📝' },
     { key: 'weekly', label: 'Weekly Review', to: '/weekly', icon: '📅' },
     { key: 'history', label: 'History', to: '/history', icon: '📜' },
-    { key: 'profile', label: 'Profile', to: '/profile', icon: '🎯' },
   ] as const;
 
   async function handleLogout() {
@@ -66,6 +65,18 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
             <div className="glass rounded-2xl p-4 space-y-3 border border-white/10">
               <div className="text-xs text-white/50 uppercase tracking-wider">บัญชี</div>
               <div className="font-medium text-sm text-white/90 break-all">{user?.email}</div>
+              <button
+                onClick={() => navigate('/profile')}
+                className={clsx(
+                  'w-full flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all',
+                  active === 'profile'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                    : 'glass border border-white/20 text-white/80 hover:bg-white/10'
+                )}
+              >
+                <span>🎯</span>
+                Win 2026 Profile
+              </button>
               <button
                 onClick={handleLogout}
                 className="w-full btn-danger rounded-xl px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all"
@@ -124,6 +135,18 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
                 </svg>
               </button>
               <button
+                onClick={() => navigate('/profile')}
+                className={clsx(
+                  'w-10 h-10 rounded-xl flex items-center justify-center transition-all',
+                  active === 'profile'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg'
+                    : 'glass border border-white/20 hover:bg-white/20'
+                )}
+                title="Win 2026 Profile"
+              >
+                <span className="text-lg">🎯</span>
+              </button>
+              <button
                 onClick={handleLogout}
                 className="btn-danger rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg"
               >
@@ -132,7 +155,7 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
             </div>
           </div>
 
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {navItems.map((item) => (
               <button
                 key={item.key}
