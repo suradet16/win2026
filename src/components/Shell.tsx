@@ -64,7 +64,9 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
             {/* User Account Card */}
             <div className="glass rounded-2xl p-4 space-y-3 border border-white/10">
               <div className="text-xs text-white/50 uppercase tracking-wider">บัญชี</div>
-              <div className="font-medium text-sm text-white/90 break-all">{user?.email}</div>
+              <div className="font-medium text-sm text-white/90 break-all">
+                {user?.user_metadata?.display_name || user?.email}
+              </div>
               <button
                 onClick={() => navigate('/settings')}
                 className={clsx(
