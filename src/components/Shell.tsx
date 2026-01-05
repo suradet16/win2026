@@ -63,9 +63,16 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
 
             {/* User Account Card */}
             <div className="glass rounded-2xl p-4 space-y-3 border border-white/10">
-              <div className="text-xs text-white/50 uppercase tracking-wider">บัญชี</div>
-              <div className="font-medium text-sm text-white/90 break-all">
-                {user?.user_metadata?.display_name || user?.email}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-lg font-bold text-white shadow-lg">
+                  {(user?.user_metadata?.display_name?.[0] || user?.email?.[0] || '?').toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-white/60">Hi 👋</div>
+                  <div className="font-bold text-white truncate">
+                    {user?.user_metadata?.display_name || 'Friend'}
+                  </div>
+                </div>
               </div>
               <button
                 onClick={() => navigate('/settings')}
