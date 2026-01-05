@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useBackground, backgroundOptions } from '../context/BackgroundContext';
 import { supabase } from '../lib/supabaseClient';
 import { Alert } from '../components/Alert';
 import { Shell } from '../components/Shell';
 
 export function SettingsPage() {
   const { user, signOut } = useAuth();
+  const { backgroundId, setBackgroundId } = useBackground();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(user?.user_metadata?.display_name || '');
   const [newPassword, setNewPassword] = useState('');
@@ -144,6 +146,53 @@ export function SettingsPage() {
             >
               {saving ? 'กำลังบันทึก...' : '💾 บันทึกชื่อ'}
             </button>
+          </div>
+        </div>
+
+        {/* Background Selection */}
+        <div className="glass-strong rounded-3xl border border-violet-500/20 bg-violet-500/5 p-6 lg:p-8 space-y-6 fade-up-4">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-2xl shadow-lg shadow-violet-500/25">
+              🖼️
+            </div>
+            <div>
+              <h3 className="font-bold text-xl text-white">พื้นหลัง</h3>
+              <p className="text-sm text-violet-400/80">เลือกภาพพื้นหลังที่ชอบ</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            {backgroundOptions.map((bg) => (
+              <button
+                key={bg.id}
+                onClick={() => setBackgroundId(bg.id)}
+                className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                  backgroundId === bg.id
+                    ? 'border-violet-400 ring-2 ring-violet-400/50 scale-105'
+                    : 'border-white/10 hover:border-white/30'
+                }`}
+              >
+                {bg.thumbnail ? (
+                  <img
+                    src={bg.thumbnail}
+                    alt={bg.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-slate-800 flex items-center justify-center">
+                    <span className="text-2xl">🚫</span>
+                  </div>
+                )}
+                <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1">
+                  <span className="text-[10px] text-white font-medium">{bg.name}</span>
+                </div>
+                {backgroundId === bg.id && (
+                  <div className="absolute top-1 right-1 w-5 h-5 bg-violet-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs">✓</span>
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
