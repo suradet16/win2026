@@ -66,16 +66,16 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
               <div className="text-xs text-white/50 uppercase tracking-wider">บัญชี</div>
               <div className="font-medium text-sm text-white/90 break-all">{user?.email}</div>
               <button
-                onClick={() => navigate('/profile')}
+                onClick={() => navigate('/settings')}
                 className={clsx(
                   'w-full flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all',
-                  active === 'profile'
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                  active === 'settings'
+                    ? 'bg-gradient-to-r from-slate-500 to-slate-600 text-white shadow-lg'
                     : 'glass border border-white/20 text-white/80 hover:bg-white/10'
                 )}
               >
-                <span>🎯</span>
-                Win 2026 Profile
+                <span>⚙️</span>
+                ตั้งค่าบัญชี
               </button>
               <button
                 onClick={handleLogout}
@@ -135,16 +135,16 @@ export function Shell({ title, subtitle, icon = '🏆', active, actions, childre
                 </svg>
               </button>
               <button
-                onClick={() => navigate('/profile')}
+                onClick={() => navigate('/settings')}
                 className={clsx(
                   'w-10 h-10 rounded-xl flex items-center justify-center transition-all',
-                  active === 'profile'
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg'
+                  active === 'settings'
+                    ? 'bg-gradient-to-r from-slate-500 to-slate-600 shadow-lg'
                     : 'glass border border-white/20 hover:bg-white/20'
                 )}
-                title="Win 2026 Profile"
+                title="ตั้งค่าบัญชี"
               >
-                <span className="text-lg">🎯</span>
+                <span className="text-lg">⚙️</span>
               </button>
               <button
                 onClick={handleLogout}

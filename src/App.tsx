@@ -11,6 +11,7 @@ import { WeeklyPage } from './pages/Weekly';
 import { LandingPage } from './pages/Landing';
 import { HistoryPage } from './pages/History';
 import { ProfilePage } from './pages/Profile';
+import { SettingsPage } from './pages/Settings';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/weekly" element={<WeeklyPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

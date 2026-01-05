@@ -125,7 +125,7 @@ export interface AlertMessage {
 // Navigation Types
 // ============================================
 
-export type NavKey = 'dashboard' | 'daily' | 'weekly' | 'history' | 'profile';
+export type NavKey = 'dashboard' | 'daily' | 'weekly' | 'history' | 'profile' | 'settings';
 
 export interface NavItem {
   key: NavKey;
