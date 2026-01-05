@@ -164,7 +164,8 @@ export function ProfilePage() {
             {/* Vision Card - Full Width */}
             <div className="lg:col-span-2 group animated-border animated-border-amber rounded-3xl">
               <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-6 lg:p-8 transition-all duration-300">
-                <div className="space-y-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="relative space-y-6">
                   {/* Header */}
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
@@ -215,7 +216,8 @@ export function ProfilePage() {
             {/* Primary Skill Card */}
             <div className="group animated-border animated-border-indigo rounded-3xl">
               <div className="relative h-full overflow-hidden rounded-3xl bg-slate-900 p-6 lg:p-8 transition-all duration-300">
-                <div className="space-y-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="relative space-y-6">
                   {/* Header */}
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-2xl shadow-lg shadow-indigo-500/25">
@@ -248,7 +250,8 @@ export function ProfilePage() {
             {/* Non-negotiables Card */}
             <div className="group animated-border animated-border-rose rounded-3xl">
               <div className="relative h-full overflow-hidden rounded-3xl bg-slate-900 p-6 lg:p-8 transition-all duration-300">
-                <div className="space-y-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="relative space-y-6">
                   {/* Header */}
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/25">
@@ -282,7 +285,8 @@ export function ProfilePage() {
           {/* Save Section */}
           <div className="animated-border animated-border-emerald rounded-3xl">
           <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-6 lg:p-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-teal-500/10 pointer-events-none" />
+            <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center">
                   <span className="text-2xl">💾</span>
