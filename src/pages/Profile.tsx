@@ -162,8 +162,8 @@ export function ProfilePage() {
           {/* Main Grid */}
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Vision Card - Full Width */}
-            <div className="lg:col-span-2 group">
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-950/50 via-slate-900 to-slate-900 border border-amber-500/20 p-6 lg:p-8 transition-all duration-300 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10">
+            <div className="lg:col-span-2 group animated-border animated-border-amber rounded-3xl">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-950/50 via-slate-900 to-slate-900 p-6 lg:p-8 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20">
                 {/* Glow Effect */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
                 
@@ -216,8 +216,8 @@ export function ProfilePage() {
             </div>
 
             {/* Primary Skill Card */}
-            <div className="group">
-              <div className="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950/50 via-slate-900 to-slate-900 border border-indigo-500/20 p-6 lg:p-8 transition-all duration-300 hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10">
+            <div className="group animated-border animated-border-indigo rounded-3xl">
+              <div className="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950/50 via-slate-900 to-slate-900 p-6 lg:p-8 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20">
                 {/* Glow Effect */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-indigo-400 to-transparent" />
 
@@ -252,8 +252,8 @@ export function ProfilePage() {
             </div>
 
             {/* Non-negotiables Card */}
-            <div className="group">
-              <div className="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-rose-950/50 via-slate-900 to-slate-900 border border-rose-500/20 p-6 lg:p-8 transition-all duration-300 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/10">
+            <div className="group animated-border animated-border-rose rounded-3xl">
+              <div className="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-rose-950/50 via-slate-900 to-slate-900 p-6 lg:p-8 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/20">
                 {/* Glow Effect */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent" />
 
@@ -289,7 +289,8 @@ export function ProfilePage() {
           </div>
 
           {/* Save Section */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-950/50 via-slate-900 to-teal-950/50 border border-emerald-500/20 p-6 lg:p-8">
+          <div className="animated-border animated-border-emerald rounded-3xl">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-950/50 via-slate-900 to-teal-950/50 p-6 lg:p-8">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-teal-500/5" />
             
             <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -323,6 +324,7 @@ export function ProfilePage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
+          </div>
           </div>
 
           {/* Tips Card */}
